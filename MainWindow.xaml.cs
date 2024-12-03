@@ -1,14 +1,6 @@
-﻿using Microsoft.Msagl.Drawing;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace comp_netwrks_course_work
 {
@@ -17,36 +9,65 @@ namespace comp_netwrks_course_work
     /// </summary>
     public partial class MainWindow : Window
     {
-        string current = "Themes/LightTheme.xaml";
         public MainWindow()
         {
             InitializeComponent();
-            ApplyTheme(current);
-            this.Background = (Brush)Application.Current.Resources["BackgroundColor"];
-            this.Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
+            ApplyTheme(Properties.Settings.Default.currentTheme);
+            Background = (Brush)Application.Current.Resources["BackgroundColor"];
+            Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
         }
 
         private void OnNetworkSimulationClick(object sender, RoutedEventArgs e)
         {
-            string mode = HalfDuplexRadio.IsChecked == true ? "Напівдуплекс" : "Дуплекс";
 
             // Создание окна визуализации графа
             var graphWindow = new GraphWindow();
 
-            graphWindow.UpdateTheme(current);
+            var network = new NetworkAnalyzer(GetWeights());
+            graphWindow.DrawGraph(network.Nodes, network.Connections);
+            graphWindow.UpdateTheme(Properties.Settings.Default.currentTheme);
 
             // Скрыть основное окно
-            this.Visibility = Visibility.Hidden;
+            Visibility = Visibility.Hidden;
 
             // Показать окно графа
             graphWindow.Show();
 
             // Восстановить видимость основного окна, когда графовое окно закрыто
             graphWindow.Closed += (s, args) => this.Visibility = Visibility.Visible;
-            OutputTextBox.Text = $"Режим: {mode}\nАнализ топологии выполнен.";
         }
 
-
+        public List<int> GetWeights()
+        {
+            try
+            {
+                List<int> numbers = Properties.Settings.Default.Weights
+        .Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries) // Убираем пустые строки
+        .Select(item =>
+        {
+            if (int.TryParse(item, out int result))
+            {
+                return result; // Преобразуем в число
+            }
+            else
+            {
+                return (int?)null; // Возвращаем null для нечисловых значений
+            }
+        })
+        .Where(x => x.HasValue) // Убираем null значения
+        .Select(x => x.Value) // Преобразуем обратно в int
+        .ToList();
+                return numbers;
+            }
+            catch (Exception ex)
+            {
+                // Логируем ошибку или уведомляем пользователя
+                MessageBox.Show($"Ошибка при обработке текста: {ex.Message}");
+                Properties.Settings.Default.Weights = "2 4 6 8 10 12 14 16 18 20 22 24";
+                Properties.Settings.Default.Save();
+                return new List<int>() { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24 };
+            }
+        }
 
         private void OnTrafficAnalysisClick(object sender, RoutedEventArgs e)
         {
@@ -57,27 +78,50 @@ namespace comp_netwrks_course_work
         private void OnDarkThemeClick(object sender, RoutedEventArgs e)
         {
             ApplyTheme("Themes/DarkTheme.xaml");
-            current = "Themes/DarkTheme.xaml";
-            this.Background = (Brush)Application.Current.Resources["BackgroundColor"];
-            this.Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
+            Background = (Brush)Application.Current.Resources["BackgroundColor"];
+            Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
         }
 
         private void OnLightThemeClick(object sender, RoutedEventArgs e)
         {
             ApplyTheme("Themes/LightTheme.xaml");
-            current = "Themes/LightTheme.xaml";
-            this.Background = (Brush)Application.Current.Resources["BackgroundColor"];
-            this.Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
+            Background = (Brush)Application.Current.Resources["BackgroundColor"];
+            Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
         }
+
+        private void OnWeightSettings(object sender, RoutedEventArgs e)
+        {
+            var weightSet = new SetWeight();
+            Visibility = Visibility.Hidden;
+            weightSet.UpdateTheme(Properties.Settings.Default.currentTheme);
+            weightSet.Show();
+            weightSet.Closed += (s, args) => this.Visibility = Visibility.Visible;
+        }
+
+        private void OnConnectSettings(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void OnNodeCount(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void OnNodeConCount(object sender, RoutedEventArgs e)
+        { 
+        
+        }
+
 
         private void ApplyTheme(string themePath)
         {
-            var theme = new ResourceDictionary
+            Properties.Settings.Default.currentTheme = themePath;
+            Properties.Settings.Default.Save();
+            
+            Application.Current.Resources.MergedDictionaries.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
             {
                 Source = new Uri(themePath, UriKind.Relative)
-            };
-            Application.Current.Resources.MergedDictionaries.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(theme);
+            });
         }
 
 

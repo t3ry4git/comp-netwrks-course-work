@@ -14,20 +14,23 @@
         </Grid.RowDefinitions>
 
         <DockPanel LastChildFill="False" Margin="10">
-            <!-- Радиокнопки и метка -->
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
-                <Label Content="Виберіть режим передачі:" Margin="0,0,10,0" />
-                <RadioButton Content="Напівдуплекс" GroupName="Mode" IsChecked="True" Name="HalfDuplexRadio" VerticalAlignment="Center" />
-                <RadioButton Content="Дуплекс" GroupName="Mode" Margin="10,0,0,0" Name="FullDuplexRadio" VerticalAlignment="Center" />
-            </StackPanel>
 
-            <!-- Меню -->
-            <Menu DockPanel.Dock="Right" VerticalAlignment="Center">
-                <MenuItem Header="Тема">
-                    <MenuItem Header="Тёмная" Click="OnDarkThemeClick" />
-                    <MenuItem Header="Светлая" Click="OnLightThemeClick" />
+            <Menu DockPanel.Dock="Left" VerticalAlignment="Center"  Width="176" Height="18">
+                <MenuItem Header="Налаштування топології" VerticalAlignment="Center" Width="176" Height="18">
+                    <MenuItem Header="Ваги" Click="OnWeightSettings" VerticalAlignment="Center" Width="176" Height="18"/>
+                    <MenuItem Header="З'єднання" Click="OnConnectSettings" VerticalAlignment="Center" Width="176" Height="18"/>
+                    <MenuItem Header="Кількість нод" Click="OnNodeCount" VerticalAlignment="Center" Width="176" Height="18"/>
+                    <MenuItem Header="З'єднань на ноду" Click="OnNodeConCount" VerticalAlignment="Center" Width="176" Height="18"/>
                 </MenuItem>
             </Menu>
+            <!-- Меню -->
+            <Menu DockPanel.Dock="Right" VerticalAlignment="Center" Width="120" Height="18">
+                <MenuItem Header="Тема" VerticalAlignment="Center" Width="120" Height="18">
+                    <MenuItem Header="Темна" Click="OnDarkThemeClick" VerticalAlignment="Center" Width="120" Height="18"/>
+                    <MenuItem Header="Світла" Click="OnLightThemeClick" VerticalAlignment="Center" Width="120" Height="18"/>
+                </MenuItem>
+            </Menu>
+            
         </DockPanel>
 
 

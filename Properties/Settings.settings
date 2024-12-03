@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="comp_netwrks_course_work.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="currentTheme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Themes/DarkTheme.xaml</Value>
+    </Setting>
+    <Setting Name="randomWeights" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Weights" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2 3 6 9 12 14 16 18 20 21</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

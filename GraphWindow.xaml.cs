@@ -4,7 +4,9 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.GraphViewerGdi;
-using System.Windows.Forms.Integration; // Для WindowsFormsHost
+using System.Windows.Forms.Integration;
+using Microsoft.Msagl.Core.Layout;
+using Microsoft.Msagl.Layout.MDS; // Для WindowsFormsHost
 
 
 namespace comp_netwrks_course_work
@@ -27,26 +29,35 @@ namespace comp_netwrks_course_work
         }
 
 
-        public void DrawGraph((double X, double Y)[] nodes, (int From, int To, int Weight)[] edges)
+        public void DrawGraph(List<Node> nodes, List<Connection> edges)
         {
             // Создаём новый граф
             var graph = new Graph("Graph");
-
+            graph.Attr.BackgroundColor = ColorConverter.ConvertToMsaglColor("BackgroundColor");
+            var mdsSettings = new MdsLayoutSettings();
+            graph.LayoutAlgorithmSettings = mdsSettings;
             // Добавляем узлы
-            for (int i = 0; i < nodes.Length; i++)
+            foreach (var lnode in nodes)
             {
-                var node = graph.AddNode(i.ToString());
+                var node = graph.AddNode(lnode.Number.ToString());
                 node.Attr.Shape = Microsoft.Msagl.Drawing.Shape.Circle;
-                node.Attr.FillColor = Microsoft.Msagl.Drawing.Color.LightBlue;
-                node.LabelText = $"({nodes[i].X}, {nodes[i].Y})"; // Можно убрать, если позиции не нужны
+                node.Attr.XRadius = 15; // Радиус по оси X
+                node.Attr.YRadius = 15; // Радиус по оси Y
+
+                // Увеличиваем размер шрифта
+                node.Label.FontSize = 32;
+                node.Attr.FillColor = lnode.GetColor();
+                node.LabelText = $"{lnode.Number}"; // Можно убрать, если позиции не нужны
             }
 
             // Добавляем рёбра
             foreach (var edge in edges)
             {
-                var msaglEdge = graph.AddEdge(edge.From.ToString(), edge.Weight.ToString(), edge.To.ToString());
-                msaglEdge.Attr.Color = Microsoft.Msagl.Drawing.Color.Gray;
+                var msaglEdge = graph.AddEdge(edge.Node1.Number.ToString(), edge.Weight.ToString(), edge.Node2.Number.ToString());
+                msaglEdge.Attr.Color = edge.GetColor();
+                msaglEdge.Label.FontColor = ColorConverter.ConvertToMsaglColor("ForegroundColor");
                 msaglEdge.Attr.LineWidth = 2;
+                msaglEdge.Label.FontSize = 32;
                 msaglEdge.LabelText = edge.Weight.ToString();
             }
 

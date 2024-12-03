@@ -75,4 +75,12 @@
     <Style TargetType="Line">
         <Setter Property="Stroke" Value="{StaticResource ConnectionColor}" />
     </Style>
+    <Style TargetType="CheckBox">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
+    </Style>
+    <Style TargetType="RichTextBox">
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
+    </Style>
 </ResourceDictionary>
