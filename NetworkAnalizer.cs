@@ -1,4 +1,5 @@
 ﻿using Microsoft.Msagl.Drawing;
+using System;
 using System.Diagnostics;
 
 namespace comp_netwrks_course_work
@@ -14,7 +15,9 @@ namespace comp_netwrks_course_work
     {
         Satellite,
         Duplex,
-        HalfDuplex
+        HalfDuplex,
+        Custom,
+        Random
     }
 
     public class Connection
@@ -31,54 +34,46 @@ namespace comp_netwrks_course_work
             Node2 = node2;
             Weight = weight;
             Type = connectionType;
+            var values = (ConnectionType[])Enum.GetValues(typeof(ConnectionType));
+            var random = new Random();
+            if (connectionType == ConnectionType.Random)
+            {
+                Type = values[random.Next(0, 3)];
+            }
         }
 
         public Color GetColor()
         {
-            switch (Type)
+            return Type switch
             {
-                case ConnectionType.Duplex:
-                case ConnectionType.HalfDuplex:
-                    return Color.Gray;
-                case ConnectionType.Satellite:
-                    return Color.DarkCyan;
-                default:
-                    return Color.Gray;
-            }
+                ConnectionType.Duplex => Color.DarkRed,
+                ConnectionType.HalfDuplex => Color.DarkOrange,
+                ConnectionType.Satellite => Color.DarkCyan,
+                _ => Color.Gray,
+            };
         }
 
         public override string ToString()
         {
-            return $"Connection => type: {Type}, node1 : {Node1.ToString()}, node2 : {Node2.ToString()}, weight : {Weight}";
+            return $"Connection => type: {Type}, node1 : {Node1}, node2 : {Node2}, weight : {Weight}";
         }
     }
 
-    public class Node
+    public class Node(int number, NodeType nodeType)
     {
-        public int Number { get; }
-        public NodeType Type { get; set; }
-        public List<Connection> Connections { get; }
-
-        public Node(int number, NodeType nodeType)
-        {
-            Number = number;
-            Connections = new List<Connection>();
-            Type = nodeType;
-        }
+        public int Number { get; } = number;
+        public NodeType Type { get; set; } = nodeType;
+        public List<Connection> Connections { get; } = [];
 
         public Color GetColor()
         {
-            switch (Type)
+            return Type switch
             {
-                case NodeType.Red:
-                    return Color.IndianRed;
-                case NodeType.Green:
-                    return Color.LightGreen;
-                case NodeType.Blue:
-                    return Color.LightBlue;
-                default:
-                    return Color.White;
-            }
+                NodeType.Red => Color.IndianRed,
+                NodeType.Green => Color.LightGreen,
+                NodeType.Blue => Color.LightBlue,
+                _ => Color.White,
+            };
         }
 
         public override string ToString() {
@@ -88,33 +83,45 @@ namespace comp_netwrks_course_work
 
     public class NetworkAnalyzer
     {
-        private const int TotalNodes = 20;
-        private const int SatelliteChannels = 2;
-        private const int AverageDegree = 3;
-        private List<int> Weights;
+        private readonly int TotalNodes;
+        private readonly int SatelliteChannels;
+        private readonly int AverageDegree;
+        private readonly List<int> Weights;
+        private readonly List<ConnectionType> Cons;
         public List<Node> Nodes { get; }
         public List<Connection> Connections { get; }
 
-        public NetworkAnalyzer(List<int> weights)
+        public NetworkAnalyzer(List<int> weights, List<ConnectionType> cons, int satellite, int nodeCount, float avg)
         {
-            Nodes = new List<Node>();
-            Connections = new List<Connection>();
+            Nodes = [];
+            Connections = [];
             Weights = weights;
+            AverageDegree = (int)(avg/2.0);
+            Cons = cons;
+            SatelliteChannels = satellite;
+            TotalNodes = nodeCount;
             for (int i = 0; i < TotalNodes; i++)
             {
                 Nodes.Add(new Node(i, i < 9 ? NodeType.Red : i < 18 ? NodeType.Green : NodeType.Blue));
             }
+            foreach(var con in Cons)
+                Debug.Write(con.ToString()+ " ");
+            Debug.WriteLine("");
+            foreach(var weight in Weights)
+                Debug.Write(weight.ToString()+ " ");
+            Debug.WriteLine("");
             GenerateNetwork();
         }
 
-        public void GenerateNetwork(List<ConnectionType>? connectionTypes = null)
+        public void GenerateNetwork()
         {
             var random = new Random();
             int weight_counter = 0;
+            int constype_counter = 0;
             // Создание связей для всех узлов
             foreach (var node in Nodes)
             {
-                int edgesNeeded = AverageDegree / 2;
+                int edgesNeeded = AverageDegree;
                 var potentialNeighbors = new List<Node>(Nodes);
                 potentialNeighbors.Remove(node);
 
@@ -138,11 +145,12 @@ namespace comp_netwrks_course_work
                         if (weight_counter == Weights.Count)
                             weight_counter = 0;
                     }
+                    ConnectionType constype = Cons[constype_counter];
+                    constype_counter++;
+                    if (constype_counter == Cons.Count)
+                        constype_counter = 0;
                     Connection connection;
-                    if(connectionTypes != null)
-                        connection = new Connection(node, neighbor, weight, connectionTypes[i]);
-                    else
-                        connection = new Connection(node,neighbor,weight, random.Next(0, 2) == 0 ? ConnectionType.Duplex : ConnectionType.HalfDuplex);
+                    connection = new Connection(node, neighbor, weight, constype);
 
                     Connections.Add(connection);
 

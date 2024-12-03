@@ -58,5 +58,65 @@ namespace comp_netwrks_course_work.Properties {
                 this["Weights"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("d h d h d h d h d h d h d h s s")]
+        public string Connections {
+            get {
+                return ((string)(this["Connections"]));
+            }
+            set {
+                this["Connections"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Custom")]
+        public string ConnectionType {
+            get {
+                return ((string)(this["ConnectionType"]));
+            }
+            set {
+                this["ConnectionType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public string MinSatelliteCount {
+            get {
+                return ((string)(this["MinSatelliteCount"]));
+            }
+            set {
+                this["MinSatelliteCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public string NodeCount {
+            get {
+                return ((string)(this["NodeCount"]));
+            }
+            set {
+                this["NodeCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public string AVGCon {
+            get {
+                return ((string)(this["AVGCon"]));
+            }
+            set {
+                this["AVGCon"] = value;
+            }
+        }
     }
 }

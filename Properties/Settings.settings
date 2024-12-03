@@ -11,5 +11,20 @@
     <Setting Name="Weights" Type="System.String" Scope="User">
       <Value Profile="(Default)">2 3 6 9 12 14 16 18 20 21</Value>
     </Setting>
+    <Setting Name="Connections" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d h d h d h d h d h d h d h s s</Value>
+    </Setting>
+    <Setting Name="ConnectionType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Custom</Value>
+    </Setting>
+    <Setting Name="MinSatelliteCount" Type="System.String" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="NodeCount" Type="System.String" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="AVGCon" Type="System.String" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

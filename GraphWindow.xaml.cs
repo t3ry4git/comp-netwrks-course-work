@@ -56,7 +56,14 @@ namespace comp_netwrks_course_work
                 var msaglEdge = graph.AddEdge(edge.Node1.Number.ToString(), edge.Weight.ToString(), edge.Node2.Number.ToString());
                 msaglEdge.Attr.Color = edge.GetColor();
                 msaglEdge.Label.FontColor = ColorConverter.ConvertToMsaglColor("ForegroundColor");
-                msaglEdge.Attr.LineWidth = 2;
+                msaglEdge.Attr.LineWidth = 3;
+                msaglEdge.Attr.ArrowheadAtSource = ArrowStyle.Normal;
+                msaglEdge.Attr.ArrowheadAtTarget = ArrowStyle.Normal;
+                if (edge.Type == ConnectionType.HalfDuplex)
+                {
+                    msaglEdge.Attr.LineWidth = 1;
+                    msaglEdge.Attr.Color = edge.GetColor();
+                }
                 msaglEdge.Label.FontSize = 32;
                 msaglEdge.LabelText = edge.Weight.ToString();
             }

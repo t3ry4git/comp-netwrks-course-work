@@ -16,14 +16,14 @@ namespace comp_netwrks_course_work
     /// </summary>
     public partial class SetWeight : Window
     {
-        private bool _isInitializing = true;
+        private readonly bool _isInitializing = true;
         public SetWeight()
         {
             InitializeComponent();
             randomly.IsChecked = Properties.Settings.Default.randomWeights;
             // Подписываемся на событие PreviewTextInput для RichTextBox
             richyWeights.PreviewTextInput += RichTextBox_PreviewTextInput;
-
+            
             // Убираем возможность вставки неподходящего текста
             DataObject.AddPastingHandler(richyWeights, OnPaste);
             SetTextFromList(richyWeights);
@@ -31,12 +31,12 @@ namespace comp_netwrks_course_work
         }
 
 
-        private void SetTextFromList(RichTextBox richTextBox)
-        {
+        private static void SetTextFromList(RichTextBox richTextBox) =>
             // Устанавливаем текст в RichTextBox
-            var textRange = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd);
-            textRange.Text = Properties.Settings.Default.Weights;
-        }
+            _ = new TextRange(richTextBox.Document.ContentStart, richTextBox.Document.ContentEnd)
+            {
+                Text = Properties.Settings.Default.Weights
+            };
         private void RichTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             // Проверяем, соответствует ли вводимый текст числам или пробелу
@@ -48,10 +48,7 @@ namespace comp_netwrks_course_work
             if (e.DataObject.GetDataPresent(DataFormats.Text))
             {
                 string? pastedText = e.DataObject.GetData(DataFormats.Text) as string;
-                if (pastedText == null)
-                {
-                    pastedText = string.Empty;
-                }
+                pastedText ??= string.Empty;
                 // Если вставленный текст содержит не только цифры и пробелы, отменяем вставку
                 if (!Regex.IsMatch(pastedText, @"^[\d\s]+$"))
                 {
