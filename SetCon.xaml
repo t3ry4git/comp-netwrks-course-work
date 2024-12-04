@@ -5,23 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Вкажіть види з'єднання" 
-        Height="250" Width="400" 
-        ResizeMode="CanMinimize">
+        Height="250" Width="400" MinHeight="200" MinWidth="350">
     <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
         <!-- Заголовок для выбора соединения -->
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" 
                    FontSize="14" FontWeight="Bold" Text="Оберіть тип з'єднання:" />
 
         <!-- Радиокнопки для выбора соединения -->
-        <StackPanel Orientation="Horizontal" Margin="10,40,10,0" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" Margin="10,10,10,0" HorizontalAlignment="Left">
             <RadioButton x:Name="Hbutton" Content="Half-Duplex" GroupName="ConnectionType" Margin="0,0,10,0" Checked="RadioButton_Checked" />
             <RadioButton x:Name="Dbutton" Content="Duplex" GroupName="ConnectionType" Margin="0,0,10,0" Checked="RadioButton_Checked_1" />
             <RadioButton x:Name="Cbutton" Content="Custom" GroupName="ConnectionType" Margin="0,0,10,0" Checked="RadioButton_Checked_2" />
             <RadioButton x:Name="Rbutton" Content="Random" GroupName="ConnectionType" Checked="RadioButton_Checked_3" />
         </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" PreviewTextInput="NumberInput_PreviewTextInput" Text="Мінімальна кількість Sattelite(не враховуючи custom):" VerticalAlignment="Top"/>
+            <TextBox x:Name="MinCount" Margin="5,10,10,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" RenderTransformOrigin="0.479,0.596" TextChanged="TextBox_TextChanged" HorizontalAlignment="Right" MinWidth="30"/>
+        </StackPanel>
 
         <!-- Поле для ввода значений -->
-        <RichTextBox x:Name="richyNet" Margin="10,80,10,50" VerticalScrollBarVisibility="Auto" 
+        <RichTextBox x:Name="richyNet" Margin="10,5,10,5" VerticalScrollBarVisibility="Visible" MaxHeight="75" 
                      BorderThickness="1" BorderBrush="Gray" Padding="5" TextChanged="RichyNet_TextChanged">
             <FlowDocument>
                 <Paragraph>
@@ -31,11 +35,10 @@
         </RichTextBox>
 
         <!-- Легенда -->
-        <TextBlock HorizontalAlignment="Left" Margin="10,189,0,0" TextWrapping="Wrap" 
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" 
                    Text="d - duplex    h - half-duplex    s - satellite    r - random" 
                    VerticalAlignment="Top" FontStyle="Italic" Foreground="Gray" />
-        <TextBox x:Name="MinCount" Margin="358,58,10,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" RenderTransformOrigin="0.479,0.596" TextChanged="TextBox_TextChanged"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,60,0,0" TextWrapping="Wrap" PreviewTextInput="NumberInput_PreviewTextInput" Text="Мінімальна кількість Sattelite(не враховуючи custom):" VerticalAlignment="Top"/>
 
+        </StackPanel>
     </Grid>
 </Window>

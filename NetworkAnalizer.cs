@@ -22,9 +22,9 @@ namespace comp_netwrks_course_work
 
     public class Connection
     {
-        public Node Node1 { get; }
-        public Node Node2 { get; }
-        public int Weight { get; }
+        public Node Node1 { get; set; }
+        public Node Node2 { get; set; }
+        public int Weight { get; set; }
 
         public ConnectionType Type { get; set; }
 
@@ -61,7 +61,7 @@ namespace comp_netwrks_course_work
 
     public class Node(int number, NodeType nodeType)
     {
-        public int Number { get; } = number;
+        public int Number { get; set; } = number;
         public NodeType Type { get; set; } = nodeType;
         public List<Connection> Connections { get; } = [];
 
@@ -83,18 +83,20 @@ namespace comp_netwrks_course_work
 
     public class NetworkAnalyzer
     {
-        private readonly int TotalNodes;
+        private int TotalNodes;
         private readonly int SatelliteChannels;
         private readonly int AverageDegree;
         private readonly List<int> Weights;
         private readonly List<ConnectionType> Cons;
-        public List<Node> Nodes { get; }
-        public List<Connection> Connections { get; }
+        private readonly GraphWindow graph;
+        public List<Node> Nodes { get; set; }
+        public List<Connection> Connections { get; set; }
 
-        public NetworkAnalyzer(List<int> weights, List<ConnectionType> cons, int satellite, int nodeCount, float avg)
+        public NetworkAnalyzer(List<int> weights, List<ConnectionType> cons, int satellite, int nodeCount, float avg, GraphWindow graphWindow)
         {
             Nodes = [];
             Connections = [];
+            graph = graphWindow;
             Weights = weights;
             AverageDegree = (int)(avg/2.0);
             Cons = cons;
@@ -102,7 +104,7 @@ namespace comp_netwrks_course_work
             TotalNodes = nodeCount;
             for (int i = 0; i < TotalNodes; i++)
             {
-                Nodes.Add(new Node(i, i < 9 ? NodeType.Red : i < 18 ? NodeType.Green : NodeType.Blue));
+                Nodes.Add(new Node(i, NodeType.Red));
             }
             foreach(var con in Cons)
                 Debug.Write(con.ToString()+ " ");
@@ -111,6 +113,19 @@ namespace comp_netwrks_course_work
                 Debug.Write(weight.ToString()+ " ");
             Debug.WriteLine("");
             GenerateNetwork();
+        }
+
+        public void RefreshNetwork(List<Node> nodes, List<Connection> connections, bool reacreate_connections)
+        {
+            TotalNodes = nodes.Count;
+            Nodes = nodes;
+            Connections = connections;
+            if (reacreate_connections)
+            {
+                Connections = new List<Connection>();
+                GenerateNetwork();
+            }
+            graph.DrawGraph(Nodes, Connections);
         }
 
         public void GenerateNetwork()

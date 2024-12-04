@@ -27,18 +27,31 @@ namespace comp_netwrks_course_work
             var nodeCount = GetNodeCount();
             var avg = GetAVG();
             NetworkAnalyzer network;
-                network = new NetworkAnalyzer(GetWeights(), GetCons(), satCount, nodeCount, avg);
+                network = new NetworkAnalyzer(GetWeights(), GetCons(), satCount, nodeCount, avg, graphWindow);
             graphWindow.DrawGraph(network.Nodes, network.Connections);
             graphWindow.UpdateTheme(Properties.Settings.Default.currentTheme);
+
+            var contolWindow = new ConnectionManipulator(network.Nodes, network.Connections, network);
+            contolWindow.UpdateTheme(Properties.Settings.Default.currentTheme);
 
             // Скрыть основное окно
             Visibility = Visibility.Hidden;
 
             // Показать окно графа
             graphWindow.Show();
+            contolWindow.Show();
 
             // Восстановить видимость основного окна, когда графовое окно закрыто
-            graphWindow.Closed += (s, args) => this.Visibility = Visibility.Visible;
+            graphWindow.Closed += (s, args) =>
+            {
+                this.Visibility = Visibility.Visible;
+                contolWindow.Close();
+            };
+            contolWindow.Closed += (s, args) =>
+            {
+                this.Visibility = Visibility.Visible;
+                graphWindow.Close();
+            };
         }
 
         public List<int> GetWeights()
