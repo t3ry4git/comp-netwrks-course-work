@@ -5,16 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:comp_netwrks_course_work"
         mc:Ignorable="d"
-        Title="Вкажіть ваги" Height="200" Width="300" ResizeMode="CanMinimize">
+        Title="Setup weights" Height="200" Width="300" MinHeight="175" MinWidth="200" WindowStartupLocation="CenterScreen">
     <Grid>
-        <CheckBox x:Name="randomly" Content="Використовувати випадково" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
-        <RichTextBox x:Name="richyWeights" Grid.ColumnSpan="2" Margin="5,30,5,5" TextChanged="RichTextBox_TextChanged">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+            <TextBlock HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" 
+                   FontSize="14" FontWeight="Bold" Text="Enter weights:" />
+            <CheckBox x:Name="randomly" Content="Use randomly" HorizontalAlignment="Center" Margin="5,5,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
+        <RichTextBox x:Name="richyWeights" Grid.ColumnSpan="2" Margin="5,5,5,5" TextChanged="RichTextBox_TextChanged" HorizontalAlignment="Center" MinHeight="50" VerticalScrollBarVisibility="Visible">
             <FlowDocument>
                 <Paragraph>
                     <Run Text="2 3 6 9 12 14 16 18 20"/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-
+        </StackPanel>
     </Grid>
 </Window>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:comp_netwrks_course_work"
         mc:Ignorable="d"
-        Title="comp-netwrks-course-work" Height="300" Width="500" MinWidth="450" MinHeight="200">
+        Title="comp-netwrks-course-work" Height="300" Width="500" MinWidth="450" MinHeight="200" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,18 +16,18 @@
         <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center" >
 
             <Menu DockPanel.Dock="Left" VerticalAlignment="Center"  Width="200" Height="30" Margin="5">
-                <MenuItem Header="Налаштування топології" VerticalAlignment="Center" Width="200" Height="30">
-                    <MenuItem Header="Ваги" Click="OnWeightSettings" VerticalAlignment="Center" Width="200" Height="30"  />
-                    <MenuItem Header="З'єднання" Click="OnConnectSettings" VerticalAlignment="Center" Width="200" Height="30"/>
-                    <MenuItem Header="Кількість нод" Click="OnNodeCount" VerticalAlignment="Center" Width="200" Height="30" />
-                    <MenuItem Header="З'єднань на ноду" Click="OnNodeConCount" VerticalAlignment="Center" Width="200" Height="30"/>
+                <MenuItem Header="Topology settings" VerticalAlignment="Center" Width="200" Height="30">
+                    <MenuItem Header="Weights" Click="OnWeightSettings" VerticalAlignment="Center" Width="200" Height="30"  />
+                    <MenuItem Header="Connections" Click="OnConnectSettings" VerticalAlignment="Center" Width="200" Height="30"/>
+                    <MenuItem Header="Number of Nodes" Click="OnNodeCount" VerticalAlignment="Center" Width="200" Height="30" />
+                    <MenuItem Header="AVG on Node" Click="OnNodeConCount" VerticalAlignment="Center" Width="200" Height="30"/>
                 </MenuItem>
             </Menu>
             <!-- Меню -->
             <Menu DockPanel.Dock="Right" VerticalAlignment="Center" Width="200" Height="30" Margin="5">
-                <MenuItem Header="Тема" VerticalAlignment="Center" Width="200" Height="30">
-                    <MenuItem Header="Темна" Click="OnDarkThemeClick" VerticalAlignment="Center" Width="200" Height="30"/>
-                    <MenuItem Header="Світла" Click="OnLightThemeClick" VerticalAlignment="Center" Width="200" Height="30"/>
+                <MenuItem Header="Theme" VerticalAlignment="Center" Width="200" Height="30">
+                    <MenuItem Header="Dark" Click="OnDarkThemeClick" VerticalAlignment="Center" Width="200" Height="30"/>
+                    <MenuItem Header="Light" Click="OnLightThemeClick" VerticalAlignment="Center" Width="200" Height="30"/>
                 </MenuItem>
             </Menu>
             
@@ -35,8 +35,8 @@
 
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="5">
-            <Button Content="Генерація та аналіз топології" Width="200" Height="30" Margin="5" Click="OnNetworkSimulationClick" />
-            <Button Content="Аналіз трафіку мережі" Width="200" Height="30" Margin="5" Click="OnTrafficAnalysisClick" />
+            <Button Content="Topology generation" Width="200" Height="30" Margin="5" Click="OnNetworkSimulationClick" />
+            <Button Content="Network Traffic Analysis" Width="200" Height="30" Margin="5" Click="OnTrafficAnalysisClick" />
         </StackPanel>
 
         <TextBox Name="OutputTextBox" Grid.Row="1" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" />

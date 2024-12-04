@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:comp_netwrks_course_work"
         xmlns:gv="clr-namespace:Microsoft.Msagl.GraphViewerGdi;assembly=Microsoft.Msagl.GraphViewerGdi"
         mc:Ignorable="d"
-        Title="GraphWindow" Height="600" Width="800" MinWidth="400" MinHeight="300">
+        Title="Graph" Height="600" Width="800" MinWidth="400" MinHeight="300" WindowStartupLocation="CenterScreen">
     <Grid>
         <WindowsFormsHost Name="GViewerHost">
             <gv:GViewer x:Name="gViewer">

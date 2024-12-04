@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:comp_netwrks_course_work"
         mc:Ignorable="d"
-        Title="AVG" Height="150" Width="200" MinWidth="150" MinHeight="120">
+        Title="AVG" Height="150" Width="200" MinWidth="150" MinHeight="120" WindowStartupLocation="CenterScreen">
     <Grid>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" >
             <Label  Content="Enter average conns" Margin="5" HorizontalAlignment="Center"/>
