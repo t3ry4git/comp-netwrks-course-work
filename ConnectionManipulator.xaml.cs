@@ -75,10 +75,15 @@ namespace comp_netwrks_course_work
         {
             foreach (var connection in Connections)
             {
+                if ((connection.Node1 == oldNode || connection.Node2 == oldNode) && newNode.Type == NodeType.Disabled)
+                {
+                    connection.Type = ConnectionType.Disabled;
+                }
                 // Если Node1 совпадает, заменяем
                 if (connection.Node1 == oldNode)
                 {
                     connection.Node1 = newNode;
+
                 }
 
                 // Если Node2 совпадает, заменяем

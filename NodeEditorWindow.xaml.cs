@@ -49,6 +49,7 @@ namespace comp_netwrks_course_work
                 return;
             }
 
+
             // Создание или обновление Node
             var nodeType = (NodeType)NodeTypeComboBox.SelectedItem;
             ResultNode = new Node(number, nodeType);

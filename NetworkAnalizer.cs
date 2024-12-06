@@ -9,6 +9,7 @@ namespace comp_netwrks_course_work
         Red,
         Green,
         Blue,
+        Disabled
     }
 
     public enum ConnectionType
@@ -17,7 +18,8 @@ namespace comp_netwrks_course_work
         Duplex,
         HalfDuplex,
         Custom,
-        Random
+        Random,
+        Disabled
     }
 
     public class Connection
@@ -75,6 +77,8 @@ namespace comp_netwrks_course_work
                 _ => Color.White,
             };
         }
+
+        public List<Connection> GetConnections() => (Type != NodeType.Disabled) ? Connections : new List<Connection>();
 
         public override string ToString() {
             return $"Node #{Number} : {Type}";
