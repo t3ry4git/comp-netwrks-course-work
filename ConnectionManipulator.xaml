@@ -20,6 +20,8 @@
             <Button x:Name="AddConnectionButton" Content="Add Connection" Margin="5" Click="AddConnectionButton_Click" />
             <Button x:Name="EditConnectionButton" Content="Edit Connection" Margin="5" Click="EditConnectionButton_Click" />
             <Button x:Name="DeleteConnectionButton" Content="Delete Connection" Margin="5" Click="DeleteConnectionButton_Click" />
+            <Button Content="Find optimal path" Click="FindOptimalPathButton_Click" Margin="5"/>
+            <Button Content="Clear optimal path" Click="ClearOptimalPathButton_Click" Margin="5" />
         </StackPanel>
         <!-- DataGrid для Nodes -->
         <DataGrid x:Name="NodesDataGrid" Grid.Row="1" Grid.Column="0"

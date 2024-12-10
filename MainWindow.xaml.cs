@@ -28,29 +28,41 @@ namespace comp_netwrks_course_work
             var avg = GetAVG();
             NetworkAnalyzer network;
                 network = new NetworkAnalyzer(GetWeights(), GetCons(), satCount, nodeCount, avg, graphWindow);
+
+            
             graphWindow.DrawGraph(network.Nodes, network.Connections);
             graphWindow.UpdateTheme(Properties.Settings.Default.currentTheme);
 
             var contolWindow = new ConnectionManipulator(network.Nodes, network.Connections, network);
             contolWindow.UpdateTheme(Properties.Settings.Default.currentTheme);
-
+            var fulker = new TimedFordFulkersonWindow(network);
+            fulker.UpdateTheme(Properties.Settings.Default.currentTheme);
             // Скрыть основное окно
             Visibility = Visibility.Hidden;
 
             // Показать окно графа
             graphWindow.Show();
             contolWindow.Show();
+            fulker.Show();
 
             // Восстановить видимость основного окна, когда графовое окно закрыто
             graphWindow.Closed += (s, args) =>
             {
                 this.Visibility = Visibility.Visible;
                 contolWindow.Close();
+                fulker.Close();
             };
             contolWindow.Closed += (s, args) =>
             {
                 this.Visibility = Visibility.Visible;
                 graphWindow.Close();
+                fulker.Close();
+            };
+            fulker.Closed += (s, args) =>
+            {
+                this.Visibility = Visibility.Visible;
+                graphWindow.Close();
+                contolWindow.Close();
             };
         }
 

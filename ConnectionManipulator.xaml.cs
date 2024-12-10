@@ -180,6 +180,121 @@ namespace comp_netwrks_course_work
             }
         }
 
+        List<Node> GetOptimalPath(Node source, Node sink)
+        {
+            var distances = new Dictionary<Node, int>();
+            var previousNodes = new Dictionary<Node, Node?>();
+            var unvisitedNodes = new HashSet<Node>();
+
+            // Инициализация
+            foreach (var node in Nodes)
+            {
+                distances[node] = int.MaxValue; // Устанавливаем "бесконечность" для всех узлов
+                previousNodes[node] = null;    // Нет предыдущих узлов
+                unvisitedNodes.Add(node);     // Все узлы ещё не посещены
+            }
+            distances[source] = 0; // Начальная точка: расстояние 0
+
+            while (unvisitedNodes.Count > 0)
+            {
+                // Выбираем узел с минимальным расстоянием
+                var current = unvisitedNodes.OrderBy(n => distances[n]).First();
+                unvisitedNodes.Remove(current);
+
+                // Если текущий узел — сток, прекращаем выполнение
+                if (current == sink)
+                    break;
+
+                // Обновляем расстояния для соседей
+                foreach (var connection in current.GetConnections())
+                {
+                    var neighbor = connection.Node1 == current ? connection.Node2 : connection.Node1;
+
+                    if (!unvisitedNodes.Contains(neighbor))
+                        continue;
+
+                    var newDist = distances[current] + connection.Weight;
+                    if (newDist < distances[neighbor])
+                    {
+                        distances[neighbor] = newDist;
+                        previousNodes[neighbor] = current;
+                    }
+                }
+            }
+
+            // Восстанавливаем путь
+            var path = new List<Node>();
+            var currentPathNode = sink;
+            while (currentPathNode != null)
+            {
+                path.Insert(0, currentPathNode);
+                currentPathNode = previousNodes[currentPathNode];
+            }
+
+            // Если путь не начинается с источника, значит пути нет
+            if (path.FirstOrDefault() != source)
+                return new List<Node>(); // Путь отсутствует
+
+            return path;
+        }
+
+        private void FindOptimalPathButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearOptimalPathButton_Click();
+            var optimalPathWindow = new OptimalPathWindow(Nodes);
+            optimalPathWindow.UpdateTheme(Properties.Settings.Default.currentTheme);
+            optimalPathWindow.Owner = this;
+
+            if (optimalPathWindow.ShowDialog() == true)
+            {
+                var sourceNode = optimalPathWindow.SelectedSource;
+                var sinkNode = optimalPathWindow.SelectedSink;
+
+                var optimalPath = GetOptimalPath(sourceNode, sinkNode);
+
+                if (optimalPath.Count > 0)
+                {
+                    // Выделяем путь на графе
+                    HighlightPathOnGraph(optimalPath);
+                    MessageBox.Show("Оптимальный маршрут найден и выделен на графе.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Маршрут не найден.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+
+        private void HighlightPathOnGraph(List<Node> optimalPath)
+        {
+            // Сбрасываем выделение всех соединений
+            foreach (var connection in Connections)
+            {
+                connection.Highlighted = false;
+            }
+
+            // Проходим по пути из узлов и находим соответствующие соединения
+            for (int i = 0; i < optimalPath.Count - 1; i++)
+            {
+                var current = optimalPath[i];
+                var next = optimalPath[i + 1];
+
+                // Находим соединение между текущим и следующим узлом
+                var connection = Connections.FirstOrDefault(c =>
+                    (c.Node1 == current && c.Node2 == next) ||
+                    (c.Node1 == next && c.Node2 == current));
+
+                if (connection != null)
+                {
+                    connection.Highlighted = true;
+                }
+            }
+            Network.RefreshNetwork(Nodes, Connections, false);
+            Connections = Network.Connections;
+            Nodes = Network.Nodes;
+        }
+
+
         public void UpdateTheme(string themePath)
         {
             var theme = new ResourceDictionary
@@ -190,6 +305,17 @@ namespace comp_netwrks_course_work
             Application.Current.Resources.MergedDictionaries.Add(theme);
             this.Background = (Brush)Application.Current.Resources["BackgroundColor"];
             this.Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
+        }
+
+        private void ClearOptimalPathButton_Click(object? sender = null, RoutedEventArgs? e = null)
+        {
+            foreach (var connection in Connections)
+            {
+                connection.Highlighted = false;
+            }
+            Network.RefreshNetwork(Nodes, Connections, false);
+            Connections = Network.Connections;
+            Nodes = Network.Nodes;
         }
     }
 }

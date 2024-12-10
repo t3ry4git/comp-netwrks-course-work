@@ -65,7 +65,7 @@ namespace comp_netwrks_course_work
                     msaglEdge.Attr.Color = edge.GetColor();
                 }
                 msaglEdge.Label.FontSize = 32;
-                msaglEdge.LabelText = edge.Weight.ToString();
+                msaglEdge.LabelText = edge.GetBalancedFlow()+"/"+edge.Weight.ToString();
             }
 
             // Устанавливаем граф для GViewer
