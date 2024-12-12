@@ -9,9 +9,7 @@
         Title="Graph" Height="600" Width="800" MinWidth="400" MinHeight="300" WindowStartupLocation="CenterScreen">
     <Grid>
         <WindowsFormsHost Name="GViewerHost">
-            <gv:GViewer x:Name="gViewer">
-                
-            </gv:GViewer>
+            <gv:GViewer x:Name="gViewer" />
         </WindowsFormsHost>
     </Grid>
 </Window>

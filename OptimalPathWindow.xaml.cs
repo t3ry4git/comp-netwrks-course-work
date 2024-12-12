@@ -1,21 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Media;
+﻿using System.Windows;
 
 namespace comp_netwrks_course_work
 {
     public partial class OptimalPathWindow : Window
     {
-        public Node SelectedSource { get; private set; }
-        public Node SelectedSink { get; private set; }
-        public bool IsConfirmed { get; private set; } = false;
+        public Node? SelectedSource { get; private set; }
+        public Node? SelectedSink { get; private set; }
 
         public OptimalPathWindow(List<Node> nodes)
         {
             InitializeComponent();
-
-            // Инициализируем ComboBox списком узлов
+            ThemeSupport.ApplyTheme(Properties.Settings.Default.currentTheme, this);
             SourceComboBox.ItemsSource = nodes;
             SinkComboBox.ItemsSource = nodes;
         }
@@ -27,38 +22,24 @@ namespace comp_netwrks_course_work
             {
                 if (sourceNode == sinkNode)
                 {
-                    MessageBox.Show("Исходный и конечный узлы должны быть разными.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Source and sink have to be different", "Info", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 SelectedSource = sourceNode;
                 SelectedSink = sinkNode;
 
-                DialogResult = true; // Установить успешный результат
+                DialogResult = true;
                 Close();
             }
             else
-            {
-                MessageBox.Show("Пожалуйста, выберите оба узла.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                MessageBox.Show("Select both, sink and source", "Info", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false; // Установить отрицательный результат
+            DialogResult = false;
             Close();
-        }
-
-
-        public void UpdateTheme(string themePath)
-        {
-            var theme = new ResourceDictionary
-            {
-                Source = new Uri(themePath, UriKind.Relative)
-            };
-            Application.Current.Resources.MergedDictionaries.Add(theme);
-            Background = (Brush)Application.Current.Resources["BackgroundColor"];
-            Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
         }
     }
 }

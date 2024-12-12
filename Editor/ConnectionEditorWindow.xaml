@@ -14,24 +14,14 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
-        <!-- Node1 -->
         <Label Grid.Row="0" Grid.Column="0" Content="Node 1:" VerticalAlignment="Center" Margin="5" />
         <ComboBox Grid.Row="0" Grid.Column="1" x:Name="Node1ComboBox" Margin="5" />
-
-        <!-- Node2 -->
         <Label Grid.Row="1" Grid.Column="0" Content="Node 2:" VerticalAlignment="Center" Margin="5" />
         <ComboBox Grid.Row="1" Grid.Column="1" x:Name="Node2ComboBox" Margin="5" />
-
-        <!-- Weight -->
         <Label Grid.Row="2" Grid.Column="0" Content="Weight:" VerticalAlignment="Center" Margin="5" />
         <TextBox Grid.Row="2" Grid.Column="1" x:Name="WeightTextBox" Margin="5" />
-
-        <!-- ConnectionType -->
         <Label Grid.Row="3" Grid.Column="0" Content="Connection Type:" VerticalAlignment="Center" Margin="5" />
         <ComboBox Grid.Row="3" Grid.Column="1" x:Name="ConnectionTypeComboBox" Margin="5" />
-
-        <!-- Buttons -->
         <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="SaveButton" Content="Save" Width="75" Height="30" Margin="5" Click="SaveButton_Click" />
             <Button x:Name="CancelButton" Content="Cancel" Width="75" Height="30" Margin="5" Click="CancelButton_Click" />

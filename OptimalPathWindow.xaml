@@ -2,30 +2,27 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:comp_netwrks_course_work"
-        Title="Нахождение оптимального маршрута" Height="200" Width="400">
+        Title="Find optimal route" Height="200" Width="400">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <Label Content="Исходный узел (source):" Width="150"/>
+            <Label Content="Source:" Width="150"/>
             <ComboBox x:Name="SourceComboBox" Width="200"
                       DisplayMemberPath="Number"/>
         </StackPanel>
-
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
-            <Label Content="Конечный узел (sink):" Width="150"/>
+            <Label Content="Sink:" Width="150"/>
             <ComboBox x:Name="SinkComboBox" Width="200"
                       DisplayMemberPath="Number"/>
         </StackPanel>
-
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
-            <Button Content="Найти маршрут" Width="120" Margin="5"
+            <Button Content="Find" Width="120" Margin="5"
                     Click="FindPathButton_Click"/>
-            <Button Content="Отмена" Width="80" Margin="5"
+            <Button Content="Cancel" Width="80" Margin="5"
                     Click="CancelButton_Click"/>
         </StackPanel>
     </Grid>

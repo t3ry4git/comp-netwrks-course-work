@@ -12,9 +12,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
         <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center" >
-
             <Menu DockPanel.Dock="Left" VerticalAlignment="Center"  Width="200" Height="30" Margin="5">
                 <MenuItem Header="Topology settings" VerticalAlignment="Center" Width="200" Height="30">
                     <MenuItem Header="Weights" Click="OnWeightSettings" VerticalAlignment="Center" Width="200" Height="30"  />
@@ -23,22 +21,16 @@
                     <MenuItem Header="AVG on Node" Click="OnNodeConCount" VerticalAlignment="Center" Width="200" Height="30"/>
                 </MenuItem>
             </Menu>
-            <!-- Меню -->
             <Menu DockPanel.Dock="Right" VerticalAlignment="Center" Width="200" Height="30" Margin="5">
                 <MenuItem Header="Theme" VerticalAlignment="Center" Width="200" Height="30">
                     <MenuItem Header="Dark" Click="OnDarkThemeClick" VerticalAlignment="Center" Width="200" Height="30"/>
                     <MenuItem Header="Light" Click="OnLightThemeClick" VerticalAlignment="Center" Width="200" Height="30"/>
                 </MenuItem>
             </Menu>
-            
         </StackPanel>
-
-
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Margin="5">
             <Button Content="Topology generation" Width="200" Height="30" Margin="5" Click="OnNetworkSimulationClick" />
-            <Button Content="Network Traffic Analysis" Width="200" Height="30" Margin="5" Click="OnTrafficAnalysisClick" />
         </StackPanel>
-
         <TextBox Name="OutputTextBox" Grid.Row="1" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" />
     </Grid>
 </Window>

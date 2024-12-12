@@ -1,106 +1,109 @@
 ﻿using System.Windows;
-using System.Windows.Media;
 
 
 namespace comp_netwrks_course_work
 {
-    /// <summary>
-    /// Interaction logic for ConnectionManipulator.xaml
-    /// </summary>
+
     public partial class ConnectionManipulator : Window
     {
-        List<Node> Nodes;
-        List<Connection> Connections;
-        NetworkAnalyzer Network;
-        public ConnectionManipulator(List<Node> nodes, List<Connection> connections, NetworkAnalyzer nc)
+        private readonly NetworkAnalyzer Network;
+
+        public ConnectionManipulator(NetworkAnalyzer nc)
         {
             InitializeComponent();
-            Nodes = nodes;
-            Connections = connections;
             Network = nc;
-            // Привязка данных к DataGrid
-            NodesDataGrid.ItemsSource = Nodes;
-            ConnectionsDataGrid.ItemsSource = Connections;
-
+            NodesDataGrid.ItemsSource = Network.Nodes;
+            ConnectionsDataGrid.ItemsSource = Network.Connections;
+            ThemeSupport.ApplyTheme(Properties.Settings.Default.currentTheme, this);
         }
 
+        private void Refresh()
+        {
+            NodesDataGrid.Items.Refresh();
+            ConnectionsDataGrid.Items.Refresh();
+        }
 
         private void AddNodeButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Visibility = Visibility.Hidden;
-            var editor = new NodeEditorWindow(Nodes);
-            editor.UpdateTheme(Properties.Settings.Default.currentTheme);
+            Visibility = Visibility.Hidden;
+            var editor = new NodeEditorWindow(Network.Nodes);
+            if (editor.ShowDialog() == true && editor.ResultNode != null) 
+                Network.Nodes.Add(editor.ResultNode);
+            Visibility = Visibility.Visible;
+            Network.Redraw();
 
-            if (editor.ShowDialog() == true) // Окно вернуло успешный результат
-            {
-                if (editor.ResultNode != null)
-                {
-                    Nodes.Add(editor.ResultNode); // Добавляем новую Node
-                }
-            }
-            this.Visibility = Visibility.Visible;
-            Network.RefreshNetwork(Nodes, Connections, false);
-            Connections = Network.Connections;
-            NodesDataGrid.Items.Refresh();
-            ConnectionsDataGrid.Items.Refresh();
         }
 
         private void EditNodeButton_Click(object sender, RoutedEventArgs e)
         {
             if (NodesDataGrid.SelectedItem is Node selectedNode)
             {
-                this.Visibility = Visibility.Hidden;
-                var nodesWithoutCurrent = Nodes.Where(node => node != selectedNode).ToList();
+                Visibility = Visibility.Hidden;
+                var nodesWithoutCurrent = Network.Nodes.Where(node => node != selectedNode).ToList();
                 var editor = new NodeEditorWindow(nodesWithoutCurrent, selectedNode);
-                editor.UpdateTheme(Properties.Settings.Default.currentTheme);
-
-                if (editor.ShowDialog() == true) // Окно вернуло успешный результат
+                if (editor.ShowDialog() == true && editor.ResultNode != null) 
                 {
-                    if (editor.ResultNode != null)
-                    {
                         var oldNode = selectedNode;
                         selectedNode.Number = editor.ResultNode.Number;
                         selectedNode.Type = editor.ResultNode.Type;
                         UpdateConnections(oldNode, selectedNode);
-                    }
                 }
-                this.Visibility = Visibility.Visible;
-                Network.RefreshNetwork(Nodes, Connections, false);
-                Connections = Network.Connections;
-                NodesDataGrid.Items.Refresh();
-                ConnectionsDataGrid.Items.Refresh();
+                Visibility = Visibility.Visible;
+                Network.Redraw();
+                Refresh(); 
             }
+
         }
         private void UpdateConnections(Node oldNode, Node newNode)
         {
-            foreach (var connection in Connections)
+            foreach (var connection in Network.Connections)
             {
-                if ((connection.Node1 == oldNode || connection.Node2 == oldNode) && newNode.Type == NodeType.Disabled)
-                {
+                if ((connection.Node1 == oldNode || connection.Node2 == oldNode) 
+                    && newNode.Type == NodeType.Disabled)
                     connection.Type = ConnectionType.Disabled;
-                }
-                // Если Node1 совпадает, заменяем
                 if (connection.Node1 == oldNode)
-                {
                     connection.Node1 = newNode;
-
-                }
-
-                // Если Node2 совпадает, заменяем
                 if (connection.Node2 == oldNode)
-                {
                     connection.Node2 = newNode;
+            }
+        }
+        private void UpdateNodes(Connection newConnection, Connection? oldConnection = null)
+        {
+            foreach(var node in Network.Nodes)
+            {
+                if (oldConnection == null)
+                {
+                    if (node.Number == newConnection.Node1.Number || node.Number == newConnection.Node2.Number)
+                        node.Connections.Add(newConnection);
                 }
+                else {
+                    if (node.Connections.Contains(oldConnection))
+                    {
+                        node.Connections.Remove(oldConnection);
+                    }
+                }
+            }
+            if (oldConnection != null) { 
+                foreach (var node in Network.Nodes)
+                {
+                    if (node.Number == newConnection.Node1.Number || node.Number == newConnection.Node2.Number)
+                        node.Connections.Add(newConnection);
+                }
+            }
+        }
+        private void DeleteConFromNode(Connection connection)
+        {
+            foreach (var node in Network.Nodes)
+            {
+                node.Connections.Remove(connection);
             }
         }
 
         private void DeleteNodeAndConnections(Node nodeToRemove)
         {
-            // Удаляем все связи, которые включают данный узел
-            Connections.RemoveAll(connection => connection.Node1 == nodeToRemove || connection.Node2 == nodeToRemove);
-
-            // Удаляем сам узел из списка
-            Nodes.Remove(nodeToRemove);
+            Network.Connections.RemoveAll(connection => 
+            connection.Node1 == nodeToRemove || connection.Node2 == nodeToRemove);
+            Network.Nodes.Remove(nodeToRemove);
         }
 
 
@@ -109,62 +112,50 @@ namespace comp_netwrks_course_work
             if (NodesDataGrid.SelectedItem is Node selectedNode)
             {
                 DeleteNodeAndConnections(selectedNode);
-                Network.RefreshNetwork(Nodes, Connections, false);
-                Connections = Network.Connections;
-                NodesDataGrid.Items.Refresh();
-                ConnectionsDataGrid.Items.Refresh();
+                Network.Redraw();
+                Refresh(); 
             }
+
         }
 
         private void AddConnectionButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Nodes.Count < 2) return;
-
-            this.Visibility = Visibility.Hidden;
-
-            var editor = new ConnectionEditorWindow(Nodes.ToList()); // Передаём список узлов
-            editor.UpdateTheme(Properties.Settings.Default.currentTheme);
-            if (editor.ShowDialog() == true) // Окно вернуло успешный результат
+            if (Network.Nodes.Count < 2) return;
+            Visibility = Visibility.Hidden;
+            var editor = new ConnectionEditorWindow([.. Network.Nodes]);
+            if (editor.ShowDialog() == true && editor.ResultConnection != null)
             {
-                if (editor.ResultConnection != null)
-                {
-                    Connections.Add(editor.ResultConnection); // Добавляем новую связь
-                }
-
+                Network.Connections.Add(editor.ResultConnection);
+                UpdateNodes(editor.ResultConnection);
             }
-            this.Visibility = Visibility.Visible;
-            Network.RefreshNetwork(Nodes, Connections, false);
-            Connections = Network.Connections;
-            NodesDataGrid.Items.Refresh();
-            ConnectionsDataGrid.Items.Refresh();
+            Visibility = Visibility.Visible;
+            Network.Redraw();
+            Refresh();
 
         }
 
         private void EditConnectionButton_Click(object sender, RoutedEventArgs e)
         {
-            
             if (ConnectionsDataGrid.SelectedItem is Connection selectedConnection)
             {
-                this.Visibility = Visibility.Hidden;
-                var editor = new ConnectionEditorWindow(Nodes.ToList(), selectedConnection); // Передаём список узлов и текущую связь
-                editor.UpdateTheme(Properties.Settings.Default.currentTheme);
-                if (editor.ShowDialog() == true) // Окно вернуло успешный результат
+                Visibility = Visibility.Hidden;
+                var editor = new ConnectionEditorWindow([.. Network.Nodes], selectedConnection);
+                
+                if (editor.ShowDialog() == true && editor.ResultConnection != null) 
                 {
-                    if (editor.ResultConnection != null)
-                    {
-                        // Обновляем данные существующей связи
-                        selectedConnection.Node1 = editor.ResultConnection.Node1;
+                    var saveSelected = selectedConnection;
+                    selectedConnection.Node1 = editor.ResultConnection.Node1;
                         selectedConnection.Node2 = editor.ResultConnection.Node2;
                         selectedConnection.Weight = editor.ResultConnection.Weight;
                         selectedConnection.Type = editor.ResultConnection.Type;
-                    }
+                    UpdateNodes(editor.ResultConnection,saveSelected);
+                        
                 }
-                this.Visibility = Visibility.Visible;
-                Network.RefreshNetwork(Nodes, Connections, false);
-                Connections = Network.Connections;
-                NodesDataGrid.Items.Refresh();
-                ConnectionsDataGrid.Items.Refresh();
+                Visibility = Visibility.Visible;
+                Network.Redraw();
+                Refresh();
             }
+
         }
 
 
@@ -172,13 +163,14 @@ namespace comp_netwrks_course_work
         {
             if (ConnectionsDataGrid.SelectedItem is Connection selectedConnection)
             {
-                Connections.Remove(selectedConnection);
-                Network.RefreshNetwork(Nodes, Connections, false);
-                Connections = Network.Connections;
-                NodesDataGrid.Items.Refresh();
-                ConnectionsDataGrid.Items.Refresh();
+                DeleteConFromNode(selectedConnection);
+                Network.Connections.Remove(selectedConnection);
+                Network.Redraw();
+                Refresh();
             }
+
         }
+
 
         List<Node> GetOptimalPath(Node source, Node sink)
         {
@@ -186,26 +178,22 @@ namespace comp_netwrks_course_work
             var previousNodes = new Dictionary<Node, Node?>();
             var unvisitedNodes = new HashSet<Node>();
 
-            // Инициализация
-            foreach (var node in Nodes)
+            foreach (var node in Network.Nodes)
             {
-                distances[node] = int.MaxValue; // Устанавливаем "бесконечность" для всех узлов
-                previousNodes[node] = null;    // Нет предыдущих узлов
-                unvisitedNodes.Add(node);     // Все узлы ещё не посещены
+                distances[node] = int.MaxValue; 
+                previousNodes[node] = null;   
+                unvisitedNodes.Add(node);    
             }
-            distances[source] = 0; // Начальная точка: расстояние 0
+            distances[source] = 0; 
 
             while (unvisitedNodes.Count > 0)
             {
-                // Выбираем узел с минимальным расстоянием
                 var current = unvisitedNodes.OrderBy(n => distances[n]).First();
                 unvisitedNodes.Remove(current);
 
-                // Если текущий узел — сток, прекращаем выполнение
                 if (current == sink)
                     break;
 
-                // Обновляем расстояния для соседей
                 foreach (var connection in current.GetConnections())
                 {
                     var neighbor = connection.Node1 == current ? connection.Node2 : connection.Node1;
@@ -222,7 +210,6 @@ namespace comp_netwrks_course_work
                 }
             }
 
-            // Восстанавливаем путь
             var path = new List<Node>();
             var currentPathNode = sink;
             while (currentPathNode != null)
@@ -231,9 +218,8 @@ namespace comp_netwrks_course_work
                 currentPathNode = previousNodes[currentPathNode];
             }
 
-            // Если путь не начинается с источника, значит пути нет
             if (path.FirstOrDefault() != source)
-                return new List<Node>(); // Путь отсутствует
+                return []; 
 
             return path;
         }
@@ -241,81 +227,67 @@ namespace comp_netwrks_course_work
         private void FindOptimalPathButton_Click(object sender, RoutedEventArgs e)
         {
             ClearOptimalPathButton_Click();
-            var optimalPathWindow = new OptimalPathWindow(Nodes);
-            optimalPathWindow.UpdateTheme(Properties.Settings.Default.currentTheme);
-            optimalPathWindow.Owner = this;
+            Refresh();
+            var optimalPathWindow = new OptimalPathWindow(Network.Nodes);
 
             if (optimalPathWindow.ShowDialog() == true)
             {
                 var sourceNode = optimalPathWindow.SelectedSource;
                 var sinkNode = optimalPathWindow.SelectedSink;
-
-                var optimalPath = GetOptimalPath(sourceNode, sinkNode);
-
-                if (optimalPath.Count > 0)
+                if (sourceNode != null && sinkNode != null)
                 {
-                    // Выделяем путь на графе
-                    HighlightPathOnGraph(optimalPath);
-                    MessageBox.Show("Оптимальный маршрут найден и выделен на графе.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Маршрут не найден.", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                    var optimalPath = GetOptimalPath(sourceNode, sinkNode);
+                    if (optimalPath.Count > 0)
+                    {
+                        HighlightPathOnGraph(optimalPath);
+                        MessageBox.Show("Optimal path on screen.", "Success", MessageBoxButton.OK,
+                                        MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Path is not exist",
+                                        "Info",
+                                        MessageBoxButton.OK,
+                                        MessageBoxImage.Information);
+                    }
                 }
             }
         }
 
         private void HighlightPathOnGraph(List<Node> optimalPath)
         {
-            // Сбрасываем выделение всех соединений
-            foreach (var connection in Connections)
-            {
-                connection.Highlighted = false;
-            }
+            ClearOptimalPathButton_Click();
 
-            // Проходим по пути из узлов и находим соответствующие соединения
             for (int i = 0; i < optimalPath.Count - 1; i++)
             {
                 var current = optimalPath[i];
                 var next = optimalPath[i + 1];
-
-                // Находим соединение между текущим и следующим узлом
-                var connection = Connections.FirstOrDefault(c =>
+                var connection = Network.Connections.FirstOrDefault(c =>
                     (c.Node1 == current && c.Node2 == next) ||
                     (c.Node1 == next && c.Node2 == current));
 
                 if (connection != null)
-                {
                     connection.Highlighted = true;
-                }
             }
-            Network.RefreshNetwork(Nodes, Connections, false);
-            Connections = Network.Connections;
-            Nodes = Network.Nodes;
-        }
-
-
-        public void UpdateTheme(string themePath)
-        {
-            var theme = new ResourceDictionary
-            {
-                Source = new Uri(themePath, UriKind.Relative)
-            };
-            Application.Current.Resources.MergedDictionaries.Clear();
-            Application.Current.Resources.MergedDictionaries.Add(theme);
-            this.Background = (Brush)Application.Current.Resources["BackgroundColor"];
-            this.Foreground = (Brush)Application.Current.Resources["ForegroundColor"];
+            Network.Redraw();
         }
 
         private void ClearOptimalPathButton_Click(object? sender = null, RoutedEventArgs? e = null)
         {
-            foreach (var connection in Connections)
-            {
+            foreach (var connection in Network.Connections)
                 connection.Highlighted = false;
-            }
-            Network.RefreshNetwork(Nodes, Connections, false);
-            Connections = Network.Connections;
-            Nodes = Network.Nodes;
+            Network.Redraw();
+        }
+
+        private void Fulker_Click(object sender, RoutedEventArgs e)
+        {
+            var fulker = new TimedFordFulkersonWindow(Network);
+            Visibility = Visibility.Hidden;
+            fulker.Show();
+            fulker.Closed += (s, args) =>
+            {
+                Visibility = Visibility.Visible;
+            };
         }
     }
 }
