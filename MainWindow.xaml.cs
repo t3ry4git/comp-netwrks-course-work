@@ -21,7 +21,6 @@ namespace comp_netwrks_course_work
                                           AVG,
                                           graphWindow);
             var contolWindow = new ConnectionManipulator(network);
-            var packetsend = new SimulationWindow();
 
             graphWindow.DrawGraph(network.Nodes, network.Connections);
 
@@ -29,26 +28,16 @@ namespace comp_netwrks_course_work
 
             graphWindow.Show();
             contolWindow.Show();
-            packetsend.Show();
 
             graphWindow.Closed += (s, args) =>
             {
                 Visibility = Visibility.Visible;
                 contolWindow.Close();
-                packetsend.Close();
             };
             contolWindow.Closed += (s, args) =>
             {
                 Visibility = Visibility.Visible;
                 graphWindow.Close();
-                packetsend.Close();
-            };
-            packetsend.Closed += (s, args) =>
-            {
-                Visibility = Visibility.Visible;
-                graphWindow.Close();
-                contolWindow.Close();
-
             };
         }
 

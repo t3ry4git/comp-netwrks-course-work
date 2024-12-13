@@ -172,7 +172,7 @@ namespace comp_netwrks_course_work
         }
 
 
-        List<Node> GetOptimalPath(Node source, Node sink)
+        public static List<Node> GetOptimalPath(Node source, Node sink, NetworkAnalyzer Network)
         {
             var distances = new Dictionary<Node, int>();
             var previousNodes = new Dictionary<Node, Node?>();
@@ -236,7 +236,7 @@ namespace comp_netwrks_course_work
                 var sinkNode = optimalPathWindow.SelectedSink;
                 if (sourceNode != null && sinkNode != null)
                 {
-                    var optimalPath = GetOptimalPath(sourceNode, sinkNode);
+                    var optimalPath = GetOptimalPath(sourceNode, sinkNode, Network);
                     if (optimalPath.Count > 0)
                     {
                         HighlightPathOnGraph(optimalPath);
@@ -285,6 +285,17 @@ namespace comp_netwrks_course_work
             Visibility = Visibility.Hidden;
             fulker.Show();
             fulker.Closed += (s, args) =>
+            {
+                Visibility = Visibility.Visible;
+            };
+        }
+
+        private void PacketSender_Click(object sender, RoutedEventArgs e)
+        {
+            var packet = new SimulationWindow(Network);
+            Visibility = Visibility.Hidden;
+            packet.Show();
+            packet.Closed += (s, args) =>
             {
                 Visibility = Visibility.Visible;
             };

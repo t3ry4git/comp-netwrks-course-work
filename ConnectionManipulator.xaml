@@ -22,6 +22,7 @@
             <Button Content="Find optimal path" Click="FindOptimalPathButton_Click" Margin="5"/>
             <Button Content="Clear path" Click="ClearOptimalPathButton_Click" Margin="5"/>
             <Button Content="Ford-Fulkerson" Click="Fulker_Click" Margin="5" />
+            <Button Content="Packet send" Click="PacketSender_Click" Margin="5"/>
         </StackPanel>
         <DataGrid x:Name="NodesDataGrid" Grid.Row="1" Grid.Column="0"
                   AutoGenerateColumns="False" CanUserAddRows="False"
