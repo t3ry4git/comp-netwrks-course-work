@@ -25,13 +25,6 @@ namespace comp_netwrks_course_work
             ThemeSupport.ApplyTheme(Properties.Settings.Default.currentTheme, this);
         }
 
-        public MessageConnectionType MessageConnectionType
-        {
-            get => default;
-            set
-            {
-            }
-        }
 
         private void PopulateNodeDropdowns()
         {

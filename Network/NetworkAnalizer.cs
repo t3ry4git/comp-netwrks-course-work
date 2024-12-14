@@ -14,21 +14,6 @@ namespace comp_netwrks_course_work
         public List<Node> Nodes { get; set; }
         public List<Connection> Connections { get; set; }
 
-        public GraphWindow GraphWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public ConnectionManipulator ConnectionManipulator
-        {
-            get => default;
-            set
-            {
-            }
-        }
 
         public NetworkAnalyzer(List<int> weights,
                                List<ConnectionType> cons,

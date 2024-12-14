@@ -2,13 +2,7 @@
 {
     public static class FordFulkerson
     {
-        public static TimedFordFulkersonWindow TimedFordFulkersonWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
+
 
         static bool NotAllConnectionsInVisited(List<Connection> connections, Node node)
         {

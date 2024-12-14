@@ -47,13 +47,6 @@
             Network = network;
         }
 
-        public SimulationWindow SimulationWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
 
         public ResultSimulator Simulate(Node node1, Node node2, MessageConnectionType type, int sizeService, int sizeInform, int countInform, int max_error)
         {

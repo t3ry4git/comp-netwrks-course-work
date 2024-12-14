@@ -40,19 +40,9 @@
   <Class Name="comp_netwrks_course_work.MainWindow">
     <Position X="5.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABAEAIABBAAQAAAgAAAAAIAQEAQEAAQASEARSACABAA=</HashCode>
+      <HashCode>ABAAAAABBAAAAAAgAAAAAIAQEAQEAAQASEAQAAAABAA=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="GraphWindow" />
-      <Property Name="ConnectionManipulator" />
-      <Property Name="SetError" />
-      <Property Name="SetAVG" />
-      <Property Name="SetNodeCount" />
-      <Property Name="SetWeight" />
-      <Property Name="SetConnection" />
-      <Property Name="NetworkAnalyzer" />
-    </ShowAsAssociation>
     <Lollipop Position="0.221" />
   </Class>
   <Class Name="comp_netwrks_course_work.GraphWindow">
@@ -114,44 +104,30 @@
   <Class Name="comp_netwrks_course_work.NetworkAnalyzer">
     <Position X="10.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEkQAAAAAAAAAAAAQIAAKAASAAAQAAAAEBAQCAAABA=</HashCode>
+      <HashCode>AAEgQAAAAAAAAAAAAQIAAKAASAAAQAAAAEBAACAAABA=</HashCode>
       <FileName>Network\NetworkAnalizer.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="GraphWindow" />
-      <Property Name="ConnectionManipulator" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="comp_netwrks_course_work.FordFulkerson">
     <Position X="12.5" Y="9.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAEAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
       <FileName>Network\FordFulkerson.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="TimedFordFulkersonWindow" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="comp_netwrks_course_work.Connection">
     <Position X="12.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EABAABAAwABAEAAEA6AgCAAIACMIIICAAQBlAABAABA=</HashCode>
+      <HashCode>AABAABAAwABAEAAEA6AgCAAAACMIIICAAQBlAABAABA=</HashCode>
       <FileName>Network\Connection.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Direction1" />
-      <Property Name="ConnectionType" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="comp_netwrks_course_work.Node">
     <Position X="16" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAAAAAAAAEAUAAICAAAAAAAACAAQAAACAAABA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAEAUAAICAAAAAAAACAAQAAACAAABA=</HashCode>
       <FileName>Network\Node.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="NodeType" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="comp_netwrks_course_work.ColorConverter" Collapsed="true">
     <Position X="14.25" Y="6.75" Width="1.5" />
@@ -208,12 +184,9 @@
   <Class Name="comp_netwrks_course_work.SimulationWindow">
     <Position X="5.75" Y="10.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>RAAIEAAAAAAAQAAIBAAAAACAAAAAAAAAAIQgAAIAADA=</HashCode>
+      <HashCode>RAAIEAAAAAAAQAAIBAAAAACAAAAAAAAAAIQgAAIAABA=</HashCode>
       <FileName>SimulationWindow.xaml.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="MessageConnectionType" />
-    </ShowAsAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="comp_netwrks_course_work.ResultSimulator">
@@ -229,12 +202,9 @@
   <Class Name="comp_netwrks_course_work.Simulator">
     <Position X="8" Y="10.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAQAAAAAAAEAAAAAAABAAAAAAAAAAAAAAQAAAQAAAA=</HashCode>
+      <HashCode>AAAQAAAAAAAAAAAAAAABAAAAAAAAAAAAAAQAAAQAAAA=</HashCode>
       <FileName>Network\Simulator.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="SimulationWindow" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="comp_netwrks_course_work.TimedFordFulkersonWindow">
     <Position X="10.75" Y="7.25" Width="1.5" />

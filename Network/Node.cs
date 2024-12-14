@@ -8,13 +8,6 @@ namespace comp_netwrks_course_work
         public NodeType Type { get; set; } = nodeType;
         public List<Connection> Connections { get; set; } = [];
 
-        public NodeType NodeType
-        {
-            get => default;
-            set
-            {
-            }
-        }
 
         public Color GetColor() => Type switch
         {

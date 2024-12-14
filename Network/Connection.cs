@@ -172,20 +172,5 @@ namespace comp_netwrks_course_work
 
         public override string ToString() => $"{Node1.OnlyNumberToString()}->{Node2.OnlyNumberToString()}";
 
-        public Direction Direction1
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public ConnectionType ConnectionType
-        {
-            get => default;
-            set
-            {
-            }
-        }
     }
 }
