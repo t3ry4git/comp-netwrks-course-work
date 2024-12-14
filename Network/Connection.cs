@@ -142,6 +142,9 @@ namespace comp_netwrks_course_work
                 int.Min(for_balance_n1n2, for_balance_n2n1))).ToString(),
                 Direction.DirectionalNode1Node2 => (Weight - WeightUsed - FlowsNode1Node2.Last()).ToString(),
                 Direction.DirectionalNode2Node1 => (Weight - WeightUsed - FlowsNode2Node1.Last()).ToString(),
+                Direction.DirectionalUndefined => (Weight - WeightUsed -
+                (int.Max(for_balance_n1n2, for_balance_n2n1) -
+                int.Min(for_balance_n1n2, for_balance_n2n1))).ToString(),
                 _ => "0"
             };
         }

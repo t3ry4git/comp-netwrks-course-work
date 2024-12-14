@@ -193,7 +193,13 @@
             time += conn.Weight + (sizeInform / conn.Weight);
             bool delivery = random.NextDouble() > conn.ChanceOfError;
             if (delivery)
+            {
+                if (conn.Type == ConnectionType.Duplex)
+                {
+                    time /= 2;
+                }
                 return (time + conn.Weight + (sizeInform / conn.Weight), resended);
+            }
             else
                 return SendPacket(conn, sizeInform, time, resended + 1);
         }
