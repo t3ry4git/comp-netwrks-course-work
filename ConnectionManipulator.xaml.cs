@@ -22,46 +22,6 @@ namespace comp_netwrks_course_work
             ThemeSupport.ApplyTheme(Properties.Settings.Default.currentTheme, this);
         }
 
-        public TimedFordFulkersonWindow TimedFordFulkersonWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public SimulationWindow SimulationWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public OptimalPathWindow OptimalPathWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public NodeEditorWindow NodeEditorWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public ConnectionEditorWindow ConnectionEditorWindow
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
         private void Refresh()
         {
             NodesDataGrid.Items.Refresh();
