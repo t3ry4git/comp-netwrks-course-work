@@ -37,8 +37,8 @@
                         <TextBox Name="InfoVolumeTextBox" Width="130" Text="r"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="5">
-                        <Label Content="Error Probability:" Width="130" VerticalAlignment="Center"/>
-                        <TextBox Name="ErrorProbabilityTextBox" Width="130" Text="r"/>
+                        <Label Content="Max error count:" Width="130" VerticalAlignment="Center"/>
+                        <TextBox Name="ErrorTextBox" Width="130" Text="r"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <Label Content="Message count:" Width="130" VerticalAlignment="Center"/>

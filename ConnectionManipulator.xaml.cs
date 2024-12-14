@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using ClosedXML.Excel;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
 
 
 namespace comp_netwrks_course_work
@@ -7,14 +10,56 @@ namespace comp_netwrks_course_work
     public partial class ConnectionManipulator : Window
     {
         private readonly NetworkAnalyzer Network;
+        private readonly GraphWindow window;
 
-        public ConnectionManipulator(NetworkAnalyzer nc)
+        public ConnectionManipulator(NetworkAnalyzer nc,GraphWindow graphWindow)
         {
+            window = graphWindow;
             InitializeComponent();
             Network = nc;
             NodesDataGrid.ItemsSource = Network.Nodes;
             ConnectionsDataGrid.ItemsSource = Network.Connections;
             ThemeSupport.ApplyTheme(Properties.Settings.Default.currentTheme, this);
+        }
+
+        public TimedFordFulkersonWindow TimedFordFulkersonWindow
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public SimulationWindow SimulationWindow
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public OptimalPathWindow OptimalPathWindow
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public NodeEditorWindow NodeEditorWindow
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public ConnectionEditorWindow ConnectionEditorWindow
+        {
+            get => default;
+            set
+            {
+            }
         }
 
         private void Refresh()
@@ -31,7 +76,6 @@ namespace comp_netwrks_course_work
                 Network.Nodes.Add(editor.ResultNode);
             Visibility = Visibility.Visible;
             Network.Redraw();
-
         }
 
         private void EditNodeButton_Click(object sender, RoutedEventArgs e)
@@ -148,6 +192,7 @@ namespace comp_netwrks_course_work
                         selectedConnection.Node2 = editor.ResultConnection.Node2;
                         selectedConnection.Weight = editor.ResultConnection.Weight;
                         selectedConnection.Type = editor.ResultConnection.Type;
+                        selectedConnection.ChanceOfError = editor.ResultConnection.ChanceOfError;
                     UpdateNodes(editor.ResultConnection,saveSelected);
                         
                 }
@@ -281,24 +326,100 @@ namespace comp_netwrks_course_work
 
         private void Fulker_Click(object sender, RoutedEventArgs e)
         {
+            window.DontCLOSE = true;
             var fulker = new TimedFordFulkersonWindow(Network);
             Visibility = Visibility.Hidden;
             fulker.Show();
             fulker.Closed += (s, args) =>
             {
                 Visibility = Visibility.Visible;
+                window.DontCLOSE = false;
             };
         }
 
         private void PacketSender_Click(object sender, RoutedEventArgs e)
         {
+            window.DontCLOSE = true;
             var packet = new SimulationWindow(Network);
             Visibility = Visibility.Hidden;
             packet.Show();
             packet.Closed += (s, args) =>
             {
                 Visibility = Visibility.Visible;
+                window.DontCLOSE = false;
             };
+        }
+
+        private void SaveRoute_Click(object sender, RoutedEventArgs e)
+        {
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Route Table");
+            worksheet.Cell(1, 1).Value = "Start";
+            worksheet.Cell(1, 2).Value = "End";
+            int i = 2;
+            foreach (Node node1 in Network.Nodes)
+            {
+                foreach (Node node2 in Network.Nodes)
+                {
+                    if (node1 != node2)
+                    {
+                        var route = FordFulkerson.GetData(node1, node2, 0, new List<Node>(), null, -1);
+                        int max_flow = route.flow;
+                        List<Connection> cons = route.connections;
+                        bool found = route.found;
+                        do
+                        {
+                            route = FordFulkerson.GetData(node1, node2, 0, new List<Node>(), null, -1);
+                            if (route.flow > max_flow && route.found == true)
+                            {
+                                cons = route.connections;
+                                max_flow = route.flow;
+                                found = route.found;
+                            }
+                        } while (route.found == true);
+                        foreach (var conny in Network.Connections)
+                        {
+                            conny.ResetFlow();
+                            conny.WeightUsed = 0;
+                            conny.Highlighted = false;
+                        }
+                        if(found == true)
+                        {
+                            worksheet.Cell(i,1).Value = node1.ToString();
+                            worksheet.Cell(i,2).Value = node2.ToString();
+                            cons.Reverse();
+                            int prev = node1.Number;
+                            worksheet.Cell(i, 3).Value = node1.OnlyNumberToString();
+                            worksheet.Cell(1, 3).Value = "STEP 1";
+                            for (int k = 0; k < cons.Count; k++) {
+                                if (cons[k].Node1.Number == prev)
+                                {
+                                    worksheet.Cell(i, k + 4).Value = cons[k].Node2.OnlyNumberToString();
+                                    prev = cons[k].Node2.Number;
+                                }
+                                else {
+                                    worksheet.Cell(i, k + 4).Value = cons[k].Node1.OnlyNumberToString();
+                                    prev = cons[k].Node1.Number;
+                                }
+                                worksheet.Cell(1, k + 4).Value = "STEP " + (k+2).ToString();
+                            }
+                            worksheet.Cell(i, cons.Count + 4).Value = $"Flow: {max_flow}";
+                            i++;
+                        }
+                    }
+                }
+            }
+            try
+            {
+                workbook.SaveAs("savedroute.xlsx");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Cannot save file", "Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                Debug.WriteLine(ex.Message);
+                return;
+            }
+            MessageBox.Show("Saved route table", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

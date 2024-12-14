@@ -9,9 +9,11 @@ namespace comp_netwrks_course_work
     public partial class GraphWindow : Window
     {
         private readonly GViewer _gViewer;
+        public bool DontCLOSE;
 
-        public GraphWindow()
+        public GraphWindow(bool dontclose)
         {
+            DontCLOSE = dontclose;
             InitializeComponent();
             ThemeSupport.ApplyTheme(Properties.Settings.Default.currentTheme, this);
             _gViewer = new GViewer();
@@ -58,5 +60,15 @@ namespace comp_netwrks_course_work
             _gViewer.Graph = graph;
         }
 
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DontCLOSE)
+            {
+                e.Cancel = true;
+
+                MessageBox.Show("Window close forbidden.");
+            }
+        }
     }
 }

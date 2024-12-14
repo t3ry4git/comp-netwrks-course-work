@@ -31,10 +31,4 @@
         UDP,
         TCP
     }
-
-    public enum PacketType
-    {
-        Datagram,
-        VirtualChannel
-    }
 }

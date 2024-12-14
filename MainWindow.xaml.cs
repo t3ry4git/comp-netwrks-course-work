@@ -13,14 +13,16 @@ namespace comp_netwrks_course_work
 
         private void OnNetworkSimulationClick(object sender, RoutedEventArgs e)
         {
-            var graphWindow = new GraphWindow();
+            bool dontclose = false;
+            var graphWindow = new GraphWindow(dontclose);
             NetworkAnalyzer network = new(Weights,
                                           Cons,
                                           MinSatteliteCount,
                                           NodeCount,
                                           AVG,
+                                          ERROR,
                                           graphWindow);
-            var contolWindow = new ConnectionManipulator(network);
+            var contolWindow = new ConnectionManipulator(network,graphWindow);
 
             graphWindow.DrawGraph(network.Nodes, network.Connections);
 
@@ -125,6 +127,39 @@ namespace comp_netwrks_course_work
             }
         }
 
+        public static List<double> ERROR
+        {
+            get
+            {
+                try
+                {
+                    string? errorString = Properties.Settings.Default.Error;
+                    if (string.IsNullOrWhiteSpace(errorString))
+                    {
+                        errorString = "0.1 0.2 0.3";
+                        Properties.Settings.Default.Error = errorString;
+                        Properties.Settings.Default.Save();
+                    }
+
+                    List<double> doubleList = errorString
+                        .Split(new[] { ' ', '\n', '\r', '\t' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Where(x => double.TryParse(x, System.Globalization.NumberStyles.Any,
+                            System.Globalization.CultureInfo.InvariantCulture, out _))
+                        .Select(x => double.Parse(x, System.Globalization.CultureInfo.InvariantCulture))
+                        .ToList();
+                    return doubleList.Count > 0 ? doubleList : new List<double> { 0.1, 0.2, 0.3 };
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error when reading text: {ex.Message}");
+                    Properties.Settings.Default.Error = "0.1 0.2 0.3";
+                    Properties.Settings.Default.Save();
+                    return new List<double> { 0.1, 0.2, 0.3 };
+                }
+            }
+        }
+
+
         public static float AVG
         {
             get
@@ -182,6 +217,77 @@ namespace comp_netwrks_course_work
             Visibility = Visibility.Hidden;
             avgSet.Show();
             avgSet.Closed += (s, args) => this.Visibility = Visibility.Visible;
+        }
+        private void OnErrorChance(object sender, RoutedEventArgs e)
+        {
+            var errorchance = new SetError();
+            Visibility = Visibility.Hidden;
+            errorchance.Show();
+            errorchance.Closed += (s, args) => this.Visibility = Visibility.Visible;
+        }
+
+        public GraphWindow GraphWindow
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public ConnectionManipulator ConnectionManipulator
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public SetError SetError
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public SetAVG SetAVG
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public SetNodeCount SetNodeCount
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public SetWeight SetWeight
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public SetConnection SetConnection
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public NetworkAnalyzer NetworkAnalyzer
+        {
+            get => default;
+            set
+            {
+            }
         }
     }
 }

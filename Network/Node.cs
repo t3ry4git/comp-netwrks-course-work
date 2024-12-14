@@ -8,6 +8,14 @@ namespace comp_netwrks_course_work
         public NodeType Type { get; set; } = nodeType;
         public List<Connection> Connections { get; set; } = [];
 
+        public NodeType NodeType
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
         public Color GetColor() => Type switch
         {
             NodeType.Red => Color.IndianRed,
@@ -24,7 +32,7 @@ namespace comp_netwrks_course_work
         };
 
         public override string ToString() => $"Node #{Number}";
-
+        public string OnlyNumberToString() => $"{Number}";
         public bool IsEqual(Node other)
         {
             if(Number !=  other.Number) return false;

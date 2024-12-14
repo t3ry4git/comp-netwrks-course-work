@@ -1,9 +1,10 @@
 ﻿<Window x:Class="comp_netwrks_course_work.ConnectionEditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Connection Editor" Height="250" Width="350" MinHeight="250" MinWidth="250" WindowStartupLocation="CenterScreen">
+        Title="Connection Editor" Height="300" Width="350" MinHeight="300" MinWidth="250" WindowStartupLocation="CenterScreen">
     <Grid Margin="10" VerticalAlignment="Center">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -22,7 +23,9 @@
         <TextBox Grid.Row="2" Grid.Column="1" x:Name="WeightTextBox" Margin="5" />
         <Label Grid.Row="3" Grid.Column="0" Content="Connection Type:" VerticalAlignment="Center" Margin="5" />
         <ComboBox Grid.Row="3" Grid.Column="1" x:Name="ConnectionTypeComboBox" Margin="5" />
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Label Grid.Row="4" Grid.Column="0" Content="Error chance:" VerticalAlignment="Center" Margin="5" />
+        <TextBox Grid.Row="4" Grid.Column="1" x:Name="ErrorTextBox" Margin="5" />
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="SaveButton" Content="Save" Width="75" Height="30" Margin="5" Click="SaveButton_Click" />
             <Button x:Name="CancelButton" Content="Cancel" Width="75" Height="30" Margin="5" Click="CancelButton_Click" />
         </StackPanel>

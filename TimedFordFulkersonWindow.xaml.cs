@@ -9,6 +9,7 @@ namespace comp_netwrks_course_work
         public Node? SelectedSource { get; private set; }
         public Node? SelectedSink { get; private set; }
         public int Iter { get; private set; }
+
         private NetworkAnalyzer Network;
         private readonly List<NetworkAnalyzer> NetworkBackup;
         private List<int> summies = [];
@@ -35,12 +36,6 @@ namespace comp_netwrks_course_work
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            if (SourceComboBox.SelectedItem is not Node
-                || SinkComboBox.SelectedItem is not Node)
-            {
-                MessageBox.Show("Select source and sink", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
             if (Iter > 0)
             {
                 Iter--;
@@ -71,10 +66,16 @@ namespace comp_netwrks_course_work
                 MessageBox.Show("Select source and sink", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            if(!int.TryParse(ErrorMax.Text, out int max_error))
+            {
+                MessageBox.Show("Not correct maximum error value", "Error", MessageBoxButton.OK,MessageBoxImage.Error);
+                return;
+            }
+
 
             NetworkAnalyzer nc = Network.Clone();
 
-            var (found, connections, flow) = FordFulkerson.GetData(sourceNode, sinkNode, 0);
+            var (found, connections, flow) = FordFulkerson.GetData(sourceNode, sinkNode, 0, new List<Node>(), null,max_error);
 
             if (found == true)
             {

@@ -23,6 +23,7 @@ namespace comp_netwrks_course_work
                 Node2ComboBox.SelectedItem = existingConnection.Node2;
                 WeightTextBox.Text = existingConnection.Weight.ToString();
                 ConnectionTypeComboBox.SelectedItem = existingConnection.Type;
+                ErrorTextBox.Text = existingConnection.ChanceOfError.ToString();
             }
             ThemeSupport.ApplyTheme(Properties.Settings.Default.currentTheme, this);
         }
@@ -49,8 +50,13 @@ namespace comp_netwrks_course_work
                 MessageBox.Show("Please select a Connection Type.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            if(!double.TryParse(ErrorTextBox.Text, out double error) || error <= 0)
+            {
+                MessageBox.Show("Error must be a positive double.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
 
-            ResultConnection = new Connection(node1, node2, weight, connectionType);
+            ResultConnection = new Connection(node1, node2, weight, connectionType,error);
             DialogResult = true;
             Close();
         }

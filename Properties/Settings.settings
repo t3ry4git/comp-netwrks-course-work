@@ -26,5 +26,11 @@
     <Setting Name="AVGCon" Type="System.String" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
+    <Setting Name="Error" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0.1 0.2 0.3</Value>
+    </Setting>
+    <Setting Name="ErrorType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Random</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

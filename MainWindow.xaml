@@ -19,6 +19,7 @@
                     <MenuItem Header="Connections" Click="OnConnectSettings" VerticalAlignment="Center" Width="200" Height="30"/>
                     <MenuItem Header="Number of Nodes" Click="OnNodeCount" VerticalAlignment="Center" Width="200" Height="30" />
                     <MenuItem Header="AVG on Node" Click="OnNodeConCount" VerticalAlignment="Center" Width="200" Height="30"/>
+                    <MenuItem Header="Error chance" Click="OnErrorChance" VerticalAlignment="Center" Width="200" Height="30"/>
                 </MenuItem>
             </Menu>
             <Menu DockPanel.Dock="Right" VerticalAlignment="Center" Width="200" Height="30" Margin="5">

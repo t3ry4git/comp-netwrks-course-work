@@ -10,20 +10,39 @@ namespace comp_netwrks_course_work
         private readonly List<int> Weights;
         private readonly List<ConnectionType> Cons;
         private readonly GraphWindow graph;
+        private readonly List<double> errorChance;
         public List<Node> Nodes { get; set; }
         public List<Connection> Connections { get; set; }
+
+        public GraphWindow GraphWindow
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public ConnectionManipulator ConnectionManipulator
+        {
+            get => default;
+            set
+            {
+            }
+        }
 
         public NetworkAnalyzer(List<int> weights,
                                List<ConnectionType> cons,
                                int satellite,
                                int nodeCount,
                                float avg,
+                               List<double> errorchance,
                                GraphWindow graphWindow)
         {
             Nodes = [];
             Connections = [];
             graph = graphWindow;
             Weights = weights;
+            errorChance = errorchance;
             AverageDegree = (int)(avg / 2.0);
             Cons = cons;
             SatelliteChannels = satellite;
@@ -57,10 +76,11 @@ namespace comp_netwrks_course_work
                 SatelliteChannels,
                 TotalNodes,
                 AverageDegree * 2,
+                errorChance,
                 graph)
             {
                 Nodes = clonedNodes,
-                Connections = clonedConnections
+                Connections = clonedConnections,
             };
         }
 
@@ -85,6 +105,7 @@ namespace comp_netwrks_course_work
         {
             var random = new Random();
             int weight_counter = 0;
+            int error_counter = 0;
             int constype_counter = 0;
             foreach (var node in Nodes)
             {
@@ -112,12 +133,25 @@ namespace comp_netwrks_course_work
                             if (weight_counter == Weights.Count)
                                 weight_counter = 0;
                         }
+                        double error = 0;
+                        if (Properties.Settings.Default.ErrorType == "Custom")
+                        {
+                            error = errorChance[error_counter];
+                            error_counter++;
+                            if (error_counter == errorChance.Count)
+                                error_counter = 0;
+                        }
+                        else
+                        {
+                            error = errorChance[random.Next(errorChance.Count)];
+                        }
+
                         ConnectionType constype = Cons[constype_counter];
                         constype_counter++;
                         if (constype_counter == Cons.Count)
                             constype_counter = 0;
                         Connection connection;
-                        connection = new Connection(node, neighbor, weight, constype);
+                        connection = new Connection(node, neighbor, weight, constype,error);
                         Connections.Add(connection);
                         node.Connections.Add(connection);
                         neighbor.Connections.Add(connection);
@@ -155,7 +189,19 @@ namespace comp_netwrks_course_work
                         if (weight_counter == Weights.Count - 1)
                             weight_counter = 0;
                     }
-                    var satelliteConnection = new Connection(source, target, weight, ConnectionType.Satellite);
+                    double error = 0;
+                    if (Properties.Settings.Default.ErrorType == "Custom")
+                    {
+                        error = errorChance[error_counter];
+                        error_counter++;
+                        if (error_counter == errorChance.Count)
+                            error_counter = 0;
+                    }
+                    else
+                    {
+                        error = errorChance[random.Next(errorChance.Count)];
+                    }
+                    var satelliteConnection = new Connection(source, target, weight, ConnectionType.Satellite, error);
                     Connections.Add(satelliteConnection);
 
                     source.Connections.Add(satelliteConnection);

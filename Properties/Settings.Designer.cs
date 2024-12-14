@@ -118,5 +118,29 @@ namespace comp_netwrks_course_work.Properties {
                 this["AVGCon"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.1 0.2 0.3")]
+        public string Error {
+            get {
+                return ((string)(this["Error"]));
+            }
+            set {
+                this["Error"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Random")]
+        public string ErrorType {
+            get {
+                return ((string)(this["ErrorType"]));
+            }
+            set {
+                this["ErrorType"] = value;
+            }
+        }
     }
 }

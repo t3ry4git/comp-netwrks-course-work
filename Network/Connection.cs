@@ -4,6 +4,7 @@ namespace comp_netwrks_course_work
 {
     public class Connection
     {
+        Random r = new Random();
         public Node Node1 { get; set; }
         public Node Node2 { get; set; }
         public int Weight { get; set; }
@@ -17,7 +18,9 @@ namespace comp_netwrks_course_work
         private Direction BackupLastDirection { get; set; }
         public Direction Direction { get; set; }
         public bool Highlighted { get; set; } = false;
-        public Connection(Node node1, Node node2, int weight, ConnectionType connectionType)
+        public bool Visited { get; set; } = false;
+        private bool BackupVisited { get; set; } = false;
+        public Connection(Node node1, Node node2, int weight, ConnectionType connectionType, double ChanceOfError)
         {
             Node1 = node1;
             Node2 = node2;
@@ -25,6 +28,7 @@ namespace comp_netwrks_course_work
             Type = connectionType;
             FlowsNode1Node2 = [];
             FlowsNode2Node1 = [];
+            this.ChanceOfError = ChanceOfError;
             var values = (ConnectionType[])Enum.GetValues(typeof(ConnectionType));
             var random = new Random();
             if (connectionType == ConnectionType.Random)
@@ -59,22 +63,40 @@ namespace comp_netwrks_course_work
             };
         }
 
-        public void SendFlow(int weight, Direction wanted)
+        int tryCon(int max, int count = 0)
         {
-            BackupDirection = Direction;
-            BackupLastDirection = LastDirection;
-            LastDirection = wanted;
+            if (max > 0)
+            {
+                if (r.NextDouble() > ChanceOfError)
+                    return count;
+                else
+                    return tryCon(max--,count++);
+            }
+            else
+                return count;
+        }
 
-            if (Direction != Direction.Bidirectional)
-                Direction = wanted;
-            if (wanted == Direction.DirectionalNode1Node2)
-                FlowsNode1Node2.Add(weight);
-            if (wanted == Direction.DirectionalNode2Node1)
-                FlowsNode2Node1.Add(weight);
+        public bool SendFlow(int weight, Direction wanted,int max)
+        {
+                BackupDirection = Direction;
+                BackupLastDirection = LastDirection;
+                LastDirection = wanted;
+                BackupVisited = Visited;
+                Visited = true;
+
+                if (Direction != Direction.Bidirectional)
+                    Direction = wanted;
+                if (wanted == Direction.DirectionalNode1Node2)
+                    FlowsNode1Node2.Add(weight);
+                if (wanted == Direction.DirectionalNode2Node1)
+                    FlowsNode2Node1.Add(weight);
+                return (tryCon(max + 1) > max ? false : true);
+            
         }
 
         public void RevertFlow()
         {
+            Visited = BackupVisited;
             Direction = BackupDirection;
             LastDirection = BackupLastDirection;
             if (FlowsNode1Node2.Count > 0)
@@ -91,6 +113,8 @@ namespace comp_netwrks_course_work
             Direction = Type is ConnectionType.Duplex or ConnectionType.Satellite ?
                 Direction.Bidirectional : Direction.DirectionalUndefined;
             LastDirection = Direction;
+            Visited = false;
+            BackupVisited = false;
         }
 
         public Color GetColor()
@@ -128,13 +152,14 @@ namespace comp_netwrks_course_work
                 con.ChanceOfError = chance;
         }
 
-        public Connection Clone() => new(Node1, Node2, Weight, Type)
+        public Connection Clone() => new(Node1, Node2, Weight, Type, ChanceOfError)
         {
             FlowsNode1Node2 = new List<int>(FlowsNode1Node2),
             FlowsNode2Node1 = new List<int>(FlowsNode2Node1),
             WeightUsed = WeightUsed,
             Direction = Direction,
-            Highlighted = Highlighted
+            Highlighted = Highlighted,
+            ChanceOfError = ChanceOfError
         };
 
         public bool IsEqual(Connection other)
@@ -143,6 +168,24 @@ namespace comp_netwrks_course_work
             if(Node2 != other.Node2) return false;
             if(Type != other.Type) return false;
             return true;
+        }
+
+        public override string ToString() => $"{Node1.OnlyNumberToString()}->{Node2.OnlyNumberToString()}";
+
+        public Direction Direction1
+        {
+            get => default;
+            set
+            {
+            }
+        }
+
+        public ConnectionType ConnectionType
+        {
+            get => default;
+            set
+            {
+            }
         }
     }
 }

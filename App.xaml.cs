@@ -7,8 +7,15 @@ namespace comp_netwrks_course_work
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App : MainWindow
     {
+        public MainWindow MainWindow
+        {
+            get => default;
+            set
+            {
+            }
+        }
     }
 
 }

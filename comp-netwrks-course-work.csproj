@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
     <PackageReference Include="Microsoft.Msagl" Version="1.1.6" />
     <PackageReference Include="Microsoft.Msagl.Drawing" Version="1.1.6" />
     <PackageReference Include="Microsoft.Msagl.GraphViewerGDI" Version="1.1.7" />
@@ -19,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="MainWindowSettings\SetError.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>

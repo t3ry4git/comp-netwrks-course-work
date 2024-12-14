@@ -5,12 +5,16 @@
     <Grid>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal">
-                <Label Content="Source:" Margin="5"/>
+                <Label Content="Source:" Margin="5,5,20,5"/>
                 <ComboBox x:Name="SourceComboBox" Width="200" Margin="5" HorizontalAlignment="Stretch"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Sink:" Margin="5,5,19,5"/>
+                <Label Content="Sink:" Margin="5,5,34,5"/>
                 <ComboBox x:Name="SinkComboBox" Width="200" Margin="5" HorizontalAlignment="Stretch"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Error max:" Margin="5" />
+                <TextBox x:Name="ErrorMax" Text="5" Width="200" Margin="5"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="Step:" Margin="5,5,20,5"/>
